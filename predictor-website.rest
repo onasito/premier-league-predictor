@@ -1,2 +1,12 @@
 ### Get request to server root
 GET http://localhost::5000
+
+### Register a new user
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+    "email": "nobody@gmail.com",
+    "username": "nobody",
+    "password": "password123"
+}

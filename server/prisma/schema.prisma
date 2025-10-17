@@ -6,10 +6,51 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  username    String    @unique
+  email       String    @unique
+  password    String
+  predictions Prediction[]
+  createdAt   DateTime  @default(now())
+}
+
+model Team {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  shortName String?
+  logoUrl   String?
+  homeMatches Match[] @relation("HomeTeam")
+  awayMatches Match[] @relation("AwayTeam")
+}
+
+model Match {
+  id          Int        @id @default(autoincrement())
+  homeTeam    Team       @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  homeTeamId  Int        
+  awayTeam    Team       @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  awayTeamId  Int        
+  HomeScore   Int?
+  awayScore   Int?
+  date        DateTime
+  predictions Prediction[]
+}
+
+model Prediction {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  match       Match    @relation(fields: [matchId], references: [id])
+  matchId     Int
+  predictedHomeScore Int
+  predictedAwayScore Int
+  pointsEarned Int?    // you can calculate this after each game
+  createdAt   DateTime @default(now())
 }
