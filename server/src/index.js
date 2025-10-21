@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import 'dotenv/config';
 import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
+import matchRoutes from './routes/matchRoutes.js';
 import { profile } from 'console';
 
 
@@ -19,6 +20,7 @@ app.use(express.json());
 // Routes
 app.use('/auth', authRoutes);
 app.use('/user', profileRoutes);
+app.use('/matches', matchRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Premier League Predictor API');
