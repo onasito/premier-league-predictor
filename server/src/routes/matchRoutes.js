@@ -13,20 +13,27 @@ router.get('/upcoming', async (req, res) => {
         const offsetDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
         const today = offsetDate.toISOString().split('T')[0];
 
-        const response = await axios.get('https://v3.football.api-sports.io/fixtures/headtohead', {
-            params: {
-                date: "2025-10-19",
-                league: 140,
-                season: 2025,
-                h2h: '33-34'
-            },
-            headers: {
-                'x-rapidapi-key': process.env.FOOTBALL_DATA_API_KEY,
-                'x-rapidapi-host': 'v3.football.api-sports.io',
-            }
+        const response = await axios.get('https://api.football-data.org/v4/matches', {
+           headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY },
         });
 
-        res.json(response.data);
+        const todaysMatches = response.data.matches.filter(
+            (match) => match.utcDate.startsWith(today)
+        )
+
+        const formattedMatches = todaysMatches.map((match) => ({
+            competition: match.competition.name,
+            homeTeam: match.homeTeam.name,
+            awayTeam: match.awayTeam.name,
+            matchTime: new Date(match.utcDate).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'America/Los_Angeles',
+            }),
+            status: match.status,
+        }))
+
+        res.json(formattedMatches);
     } catch (error) {
         console.error('Error fetching matches:', error.message);
         res.status(500).json({ error: 'Failed to fetch matches' });

@@ -1,12 +1,29 @@
 ### Get request to server root
-GET http://localhost::5000
+GET http://localhost:5000
 
 ### Register a new user
 POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
-    "email": "nobody@gmail.com",
-    "username": "nobody",
-    "password": "password123"
+    "email": "onasisjr@gmail.com",
+    "username": "onasisjr",
+    "password": "noLesbo"
 }
+
+### Login with existing user
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+    "email": "onasisjr@gmail.com",
+    "password": "noLesbo"
+}
+
+### Get user profile (replace <TOKEN> with actual token)
+GET http://localhost:5000/user/profile
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzYwOTk1Mjg2LCJleHAiOjE3NjEwODE2ODZ9.Ig_9sLo2zdteVYhlxZ_FWzODb-6yeVznUSBwe8d3F08
+
+### Get upcoming matches
+GET http://localhost:5000/matches/upcoming
+
