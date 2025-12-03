@@ -1,4 +1,5 @@
 import express from 'express';
+// Import axios for making HTTP requests
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -17,9 +18,16 @@ router.get('/upcoming', async (req, res) => {
            headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY },
         });
 
+        // println(response.data);
+        /*
         const todaysMatches = response.data.matches.filter(
             (match) => match.utcDate.startsWith(today)
         )
+
+        // If no matches today, return a message
+        if (todaysMatches.length === 0) {
+            return res.json({ message: 'No matches scheduled for today' });
+        }
 
         const formattedMatches = todaysMatches.map((match) => ({
             competition: match.competition.name,
@@ -32,8 +40,9 @@ router.get('/upcoming', async (req, res) => {
             }),
             status: match.status,
         }))
-
-        res.json(formattedMatches);
+        */
+        res.json(response.data);
+        //res.json(formattedMatches);
     } catch (error) {
         console.error('Error fetching matches:', error.message);
         res.status(500).json({ error: 'Failed to fetch matches' });
