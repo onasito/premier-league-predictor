@@ -8,6 +8,10 @@ const router = express.Router();
 router.post('/predictions', verifyToken, async (req, res) => {
     try {
         const {matchId, predictedWinner} = req.body;
+        // if there is no matchId or predictedWinner, return 400
+        if (!matchId || !predictedWinner) {
+            return res.status(400).json({error: 'matchId and predictedWinner are required'});
+        }
     } catch (error) {
         
     }
