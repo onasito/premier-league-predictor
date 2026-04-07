@@ -22,8 +22,77 @@ Content-Type: application/json
 
 ### Get user profile (replace <TOKEN> with actual token)
 GET http://localhost:5000/user/profile
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzYwOTk1Mjg2LCJleHAiOjE3NjEwODE2ODZ9.Ig_9sLo2zdteVYhlxZ_FWzODb-6yeVznUSBwe8d3F08
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1MjQzNTkyLCJleHAiOjE3NzUzMjk5OTJ9.xTc_kRtjheDsKC4_85ql7huK3tnt_EeD5YEtovg4EUg
 
 ### Get upcoming matches
 GET http://localhost:5000/matches/upcoming
+
+### Submit a prediction (HOME win)
+POST http://localhost:5000/predictions
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
+
+{
+    "matchId": 1001,
+    "homeTeam": "Arsenal",
+    "awayTeam": "Chelsea",
+    "matchDate": "2026-04-10T15:00:00Z",
+    "predictedWinner": "HOME"
+}
+
+### Submit a prediction (AWAY win)
+POST http://localhost:5000/predictions
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
+
+{
+    "matchId": 1002,
+    "homeTeam": "Manchester City",
+    "awayTeam": "Liverpool",
+    "matchDate": "2026-04-11T17:30:00Z",
+    "predictedWinner": "AWAY"
+}
+
+### Submit a prediction (DRAW)
+POST http://localhost:5000/predictions
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
+
+{
+    "matchId": 1003,
+    "homeTeam": "Tottenham",
+    "awayTeam": "Manchester United",
+    "matchDate": "2026-04-12T14:00:00Z",
+    "predictedWinner": "DRAW"
+}
+
+### Submit duplicate prediction (should return 409)
+POST http://localhost:5000/predictions
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
+
+{
+    "matchId": 1001,
+    "homeTeam": "Arsenal",
+    "awayTeam": "Chelsea",
+    "matchDate": "2026-04-10T15:00:00Z",
+    "predictedWinner": "AWAY"
+}
+
+### Submit prediction with invalid winner (should return 400)
+POST http://localhost:5000/predictions
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
+
+{
+    "matchId": 1004,
+    "homeTeam": "Brighton",
+    "awayTeam": "Aston Villa",
+    "matchDate": "2026-04-13T16:00:00Z",
+    "predictedWinner": "ARSENAL"
+}
+
+### Get my predictions
+GET http://localhost:5000/predictions/my
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
 

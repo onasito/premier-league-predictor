@@ -5,7 +5,7 @@ import 'dotenv/config';
 import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import matchRoutes from './routes/matchRoutes.js';
-import { profile } from 'console';
+import predictionRoutes from './routes/predictionRoutes.js';
 
 
 const PORT = process.env.PORT || 5000;
@@ -21,6 +21,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/user', profileRoutes);
 app.use('/matches', matchRoutes);
+app.use('/predictions', predictionRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Premier League Predictor API');
