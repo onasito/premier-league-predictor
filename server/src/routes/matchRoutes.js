@@ -18,8 +18,7 @@ router.get('/upcoming', async (req, res) => {
            headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY },
         });
 
-        // println(response.data);
-        /*
+
         const todaysMatches = response.data.matches.filter(
             (match) => match.utcDate.startsWith(today)
         )
@@ -40,7 +39,7 @@ router.get('/upcoming', async (req, res) => {
             }),
             status: match.status,
         }))
-        */
+        
         res.json(response.data);
         //res.json(formattedMatches);
     } catch (error) {

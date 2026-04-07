@@ -8,7 +8,7 @@ function verifyToken (req, res, next) {
     }
 
     // Verify token
-    jwt.verify(token, process.env.jwt_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         // if there is an error verifying the token
         if (err) {
             return res.status(401).send({ message: 'Unauthorized token' });

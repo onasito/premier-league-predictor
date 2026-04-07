@@ -5,7 +5,6 @@ npm-debug.log
 
 # Prisma
 prisma/dev.db
-prisma/migrations/
 
 # OS / Editor junk
 .DS_Store
