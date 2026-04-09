@@ -39,6 +39,7 @@ model Match {
   awayTeamId  Int        
   HomeScore   Int?
   awayScore   Int?
+  result      String?      // HOME | AWAY | DRAW — null until match is finished
   date        DateTime
   predictions Prediction[]
 }

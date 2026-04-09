@@ -30,7 +30,7 @@ GET http://localhost:5000/matches/upcoming
 ### Submit a prediction (HOME win)
 POST http://localhost:5000/predictions
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NjkxMjQwLCJleHAiOjE3NzU3Nzc2NDB9.mZ3VWwI58qLVLgDkj1aNxBxDo0kbUkWGl6FID6FyHKA
 
 {
     "matchId": 1001,
@@ -94,5 +94,32 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4
 
 ### Get my predictions
 GET http://localhost:5000/predictions/my
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4MTg3LCJleHAiOjE3NzU2MDQ1ODd9.KesNbMQkDedouTm0FesnMrZ5X_5rMX8C8gevEI59CLQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NjkxMjQwLCJleHAiOjE3NzU3Nzc2NDB9.mZ3VWwI58qLVLgDkj1aNxBxDo0kbUkWGl6FID6FyHKA
+
+### Record match result (HOME win) — awards points to all predictors
+POST http://localhost:5000/matches/1001/result
+Content-Type: application/json
+
+{
+    "result": "HOME"
+}
+
+### Record match result (AWAY win)
+POST http://localhost:5000/matches/1002/result
+Content-Type: application/json
+
+{
+    "result": "AWAY"
+}
+
+### Record duplicate result (should return 409)
+POST http://localhost:5000/matches/1001/result
+Content-Type: application/json
+
+{
+    "result": "AWAY"
+}
+
+### Get leaderboard
+GET http://localhost:5000/leaderboard
 
