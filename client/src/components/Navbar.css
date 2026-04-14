@@ -45,3 +45,10 @@
 .btn-login:hover {
   background: #7a00cc !important;
 }
+
+.navbar-links button.btn-login {
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: inherit;
+}
