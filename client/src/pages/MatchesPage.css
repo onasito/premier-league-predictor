@@ -1,0 +1,149 @@
+.matches-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.matches-page h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #e8d5ff;
+  margin-bottom: 8px;
+}
+
+.login-prompt {
+  color: #8b7aa6;
+  font-size: 15px;
+  margin-bottom: 32px;
+}
+
+.login-prompt a {
+  color: #c084fc;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
+.matches-status {
+  text-align: center;
+  padding: 80px 32px;
+  color: #8b7aa6;
+  font-size: 18px;
+}
+
+.matches-status.error {
+  color: #fca5a5;
+}
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.match-card {
+  background: #1a1a2e;
+  border: 1px solid #2e2e4a;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.match-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.competition {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #c084fc;
+  background: rgba(94, 0, 153, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.match-time {
+  font-size: 13px;
+  color: #8b7aa6;
+}
+
+.match-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.team {
+  font-size: 17px;
+  font-weight: 700;
+  color: #e8d5ff;
+  flex: 1;
+}
+
+.team.home {
+  text-align: left;
+}
+
+.team.away {
+  text-align: right;
+}
+
+.vs {
+  font-size: 13px;
+  color: #4a4060;
+  font-weight: 600;
+  padding: 0 16px;
+}
+
+.predict-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-predict {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #2e2e4a;
+  border-radius: 8px;
+  background: transparent;
+  color: #c9b8e8;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  font-family: inherit;
+}
+
+.btn-predict:hover:not(:disabled) {
+  background: rgba(94, 0, 153, 0.25);
+  border-color: #5e0099;
+  color: #e8d5ff;
+}
+
+.btn-predict:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.prediction-made {
+  font-size: 14px;
+  color: #8b7aa6;
+  text-align: center;
+  padding: 10px;
+  background: rgba(94, 0, 153, 0.1);
+  border: 1px solid #3d0066;
+  border-radius: 8px;
+}
+
+.prediction-made strong {
+  color: #c084fc;
+}
