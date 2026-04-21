@@ -30,7 +30,7 @@ GET http://localhost:5000/matches/upcoming
 ### Submit a prediction (HOME win)
 POST http://localhost:5000/predictions
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NjkxMjQwLCJleHAiOjE3NzU3Nzc2NDB9.mZ3VWwI58qLVLgDkj1aNxBxDo0kbUkWGl6FID6FyHKA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzc2NzI3NDg4LCJleHAiOjE3NzY4MTM4ODh9.tRiovtUzs2OIWZU1wCs9KozlypshZnZM1boXAAFIC44
 
 {
     "matchId": 1001,
@@ -79,6 +79,19 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1NTE4
     "predictedWinner": "AWAY"
 }
 
+### Submit prediction for another match
+POST http://localhost:5000/predictions
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzc2NzI3NDg4LCJleHAiOjE3NzY4MTM4ODh9.tRiovtUzs2OIWZU1wCs9KozlypshZnZM1boXAAFIC44
+
+{
+    "matchId": 1005,
+    "homeTeam": "Manchester City",
+    "awayTeam": "Arsenal",
+    "matchDate": "2026-04-20T15:00:00Z",
+    "predictedWinner": "HOME"
+}
+
 ### Submit prediction with invalid winner (should return 400)
 POST http://localhost:5000/predictions
 Content-Type: application/json
@@ -98,6 +111,14 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzc1Njkx
 
 ### Record match result (HOME win) — awards points to all predictors
 POST http://localhost:5000/matches/1001/result
+Content-Type: application/json
+
+{
+    "result": "HOME"
+}
+
+### Record match result (HOME win) — awards points to all predictors
+POST http://localhost:5000/matches/1005/result
 Content-Type: application/json
 
 {
