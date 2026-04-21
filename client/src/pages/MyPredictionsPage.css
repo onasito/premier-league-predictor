@@ -1,0 +1,143 @@
+.mypredictions-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.mypredictions-page h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #e8d5ff;
+  margin-bottom: 32px;
+}
+
+.mypredictions-status {
+  text-align: center;
+  padding: 80px 32px;
+  color: #8b7aa6;
+  font-size: 18px;
+}
+
+.mypredictions-status.error {
+  color: #fca5a5;
+}
+
+.mypredictions-status a {
+  color: #c084fc;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #1a1a2e;
+  border: 1px solid #2e2e4a;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #c084fc;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #8b7aa6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.predictions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prediction-card {
+  background: #1a1a2e;
+  border: 1px solid #2e2e4a;
+  border-radius: 12px;
+  padding: 20px 24px;
+  border-left: 4px solid #2e2e4a;
+}
+
+.prediction-card.correct {
+  border-left-color: #22c55e;
+}
+
+.prediction-card.wrong {
+  border-left-color: #ef4444;
+}
+
+.prediction-match {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.prediction-teams {
+  font-weight: 700;
+  color: #e8d5ff;
+  font-size: 15px;
+}
+
+.prediction-date {
+  font-size: 13px;
+  color: #8b7aa6;
+}
+
+.prediction-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prediction-pick {
+  font-size: 14px;
+  color: #8b7aa6;
+}
+
+.prediction-pick strong {
+  color: #c9b8e8;
+}
+
+.badge {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.badge.pending {
+  background: rgba(139, 122, 166, 0.15);
+  color: #8b7aa6;
+}
+
+.badge.correct {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.badge.wrong {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+}

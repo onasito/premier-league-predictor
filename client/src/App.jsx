@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import MatchesPage from './pages/MatchesPage'
 import LeaderboardPage from './pages/LeaderboardPage'
+import MyPredictionsPage from './pages/MyPredictionsPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/matches" element={<MatchesPage />} />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
+        <Route path="/my-predictions" element={<MyPredictionsPage />} />
       </Routes>
     </AuthProvider>
   )

@@ -17,6 +17,7 @@ function Navbar() {
       <div className="navbar-links">
         <Link to="/matches">Matches</Link>
         <Link to="/leaderboard">Leaderboard</Link>
+        {isLoggedIn && <Link to="/my-predictions">My Predictions</Link>}
         {isLoggedIn
           ? <button className="btn-login" onClick={handleLogout}>Logout</button>
           : <Link to="/login" className="btn-login">Login</Link>
