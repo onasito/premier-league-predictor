@@ -31,17 +31,14 @@ def get_rolling_win_pct(df, team, date, n=5):
 df['home_win_pct'] = df.apply(lambda row: get_rolling_win_pct(df, row['HomeTeam'], row['Date']), axis=1)
 df['away_win_pct'] = df.apply(lambda row: get_rolling_win_pct(df, row['AwayTeam'], row['Date']), axis=1)
 
-# Define the target variable: 1 if home team wins, 0 otherwise
-df['target'] = df['FTR'].map({'H': 1, 'A': 0, 'D': 0})
-
-# Split into features (x) and target (y)
+# Split into features (x) and target (y) — keep all three classes H/A/D
 x = df[['home_win_pct', 'away_win_pct']]
-y = df['target']
+y = df['FTR']
 
 # Train/test split
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
-# Train a logistic regression model
+# Train logistic regression model
 model = LogisticRegression()
 model.fit(x_train, y_train)
 
