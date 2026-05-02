@@ -6,9 +6,10 @@ import './MatchesPage.css'
 function MatchesPage() {
   const [matches, setMatches] = useState([])
   const [myPredictions, setMyPredictions] = useState({})
+  const [mlPredictions, setMlPredictions] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [submitting, setSubmitting] = useState(null) // matchId currently being submitted
+  const [submitting, setSubmitting] = useState(null)
 
   const { token, isLoggedIn } = useAuth()
 
@@ -16,17 +17,27 @@ function MatchesPage() {
     async function fetchData() {
       try {
         const matchRes = await axios.get('http://localhost:5000/matches/upcoming')
-
-        // backend returns raw API data or a message object if no matches today
         const matchList = matchRes.data.matches || []
         setMatches(matchList)
 
-        // if logged in, also fetch the user's existing predictions
+        // fetch ML prediction for each match
+        const mlResults = {}
+        await Promise.all(matchList.map(async (match) => {
+          try {
+            const res = await axios.get('http://localhost:5000/matches/prediction', {
+              params: { homeTeam: match.homeTeam.name, awayTeam: match.awayTeam.name }
+            })
+            mlResults[match.id] = res.data
+          } catch {
+            mlResults[match.id] = null
+          }
+        }))
+        setMlPredictions(mlResults)
+
         if (isLoggedIn) {
           const predRes = await axios.get('http://localhost:5000/predictions/my', {
             headers: { Authorization: token }
           })
-          // build a map of matchId -> predictedWinner for quick lookup
           const predMap = {}
           predRes.data.forEach(p => { predMap[p.matchId] = p.predictedWinner })
           setMyPredictions(predMap)
@@ -72,6 +83,13 @@ function MatchesPage() {
     })
   }
 
+  function getMlLabel(ml, match) {
+    if (!ml) return null
+    if (ml.prediction === 'H') return `${match.homeTeam.shortName || match.homeTeam.name} to win`
+    if (ml.prediction === 'A') return `${match.awayTeam.shortName || match.awayTeam.name} to win`
+    return 'Draw'
+  }
+
   if (loading) return <div className="matches-status">Loading matches...</div>
   if (error) return <div className="matches-status error">{error}</div>
   if (matches.length === 0) return <div className="matches-status">No matches scheduled for today.</div>
@@ -90,6 +108,7 @@ function MatchesPage() {
         {matches.map(match => {
           const prediction = myPredictions[match.id]
           const isSubmitting = submitting === match.id
+          const ml = mlPredictions[match.id]
 
           return (
             <div key={match.id} className="match-card">
@@ -103,6 +122,16 @@ function MatchesPage() {
                 <span className="vs">vs</span>
                 <span className="team away">{match.awayTeam.name}</span>
               </div>
+
+              {ml && (
+                <div className="ml-prediction">
+                  <span className="ml-label">Model predicts:</span>
+                  <span className="ml-pick">{getMlLabel(ml, match)}</span>
+                  <span className="ml-probs">
+                    H {ml.probabilities?.H}% · D {ml.probabilities?.D}% · A {ml.probabilities?.A}%
+                  </span>
+                </div>
+              )}
 
               <div className="match-actions">
                 {prediction ? (

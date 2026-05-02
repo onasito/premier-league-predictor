@@ -2,6 +2,35 @@ import pandas as pd
 import glob
 import joblib
 
+# Map full team names to the abbreviations used in the dataset
+TEAM_NAME_MAP = {
+    'Arsenal FC' : 'Arsenal',
+    'West Ham United FC' : 'West Ham',
+    'Brentford FC' : 'Brentford',
+    'Wolverhampton Wanderers FC' : 'Wolves',
+    'Fulham FC' : 'Fulham',
+    'Brighton & Hove Albion FC' : 'Brighton',
+    'Crystal Palace FC' : 'Crystal Palace',
+    'Aston Villa FC' : 'Aston Villa',
+    'Newcastle United FC' : 'Newcastle',
+    'Tottenham Hotspur FC' : 'Tottenham',
+    'Manchester City FC' : 'Man City',
+    'Liverpool FC' : 'Liverpool',
+    'Manchester United FC' : 'Man United',
+    'Chelsea FC' : 'Chelsea',
+    'Leicester City FC' : 'Leicester',
+    'Nottingham Forest FC' : 'Nott\'m Forest',
+    'Everton FC' : 'Everton',
+    'Southampton FC' : 'Southampton',
+    'Leeds United FC' : 'Leeds',
+    'Bournemouth AFC' : 'Bournemouth',
+    'Burnley FC' : 'Burnley',
+    'Sunderland AFC' : 'Sunderland',
+}
+
+def normalize_team(name):
+    return TEAM_NAME_MAP.get(name, name)
+
 # load the trained model
 model = joblib.load('model.pkl')
 
@@ -24,6 +53,8 @@ def get_rolling_win_pct(team, n=5):
     return wins / len(past)
 
 def predict_match(home_team, away_team):
+    home_team = normalize_team(home_team)
+    away_team = normalize_team(away_team)
     home_win_pct = get_rolling_win_pct(home_team)
     away_win_pct = get_rolling_win_pct(away_team)
 

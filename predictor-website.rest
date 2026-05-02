@@ -144,3 +144,22 @@ Content-Type: application/json
 ### Get leaderboard
 GET http://localhost:5000/leaderboard
 
+### Test ML prediction (direct to Python API)
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+    "homeTeam": "Man City",
+    "awayTeam": "Newcastle"
+}
+
+### Test ML prediction (through Express)
+GET http://localhost:5000/matches/prediction?homeTeam=Arsenal&awayTeam=Chelsea
+
+
+### Test football-data API directly
+GET https://api.football-data.org/v4/matches
+X-Auth-Token: a0485d6d198fbfcd2d9f6d249b21d3d8
+
+### Get all teams in the Premier League
+GET https://api.football-data.org/v4/competitions/PL/matches
