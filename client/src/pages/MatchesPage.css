@@ -147,3 +147,35 @@
 .prediction-made strong {
   color: #c084fc;
 }
+
+.ml-prediction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(94, 0, 153, 0.08);
+  border: 1px solid #3d0066;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.ml-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b5a85;
+}
+
+.ml-pick {
+  font-size: 14px;
+  font-weight: 700;
+  color: #c084fc;
+}
+
+.ml-probs {
+  font-size: 12px;
+  color: #6b5a85;
+  margin-left: auto;
+}

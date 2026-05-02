@@ -12,14 +12,17 @@ router.get('/upcoming', async (req, res) => {
     try {
         const now = new Date();
         const offsetDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-        const today = offsetDate.toISOString().split('T')[0];
+        //const today = offsetDate.toISOString().split('T')[0];
+        const today = '2026-05-02'; // Hardcoded for testing
 
         const response = await axios.get('https://api.football-data.org/v4/matches', {
            headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY },
         });
 
+        const allowedCompetitions = ['PL'];
+
         const todaysMatches = response.data.matches.filter(
-            (match) => match.utcDate.startsWith(today)
+            (match) => match.utcDate.startsWith(today) && allowedCompetitions.includes(match.competition.code)
         );
 
         if (todaysMatches.length === 0) {
@@ -38,11 +41,30 @@ router.get('/upcoming', async (req, res) => {
             status: match.status,
         }));
 
-        res.json(response.data);
-        //res.json(formattedMatches);
+        res.json({ matches: todaysMatches });
     } catch (error) {
         console.error('Error fetching matches:', error.message);
         res.status(500).json({ error: 'Failed to fetch matches' });
+    }
+});
+
+// GET /matches/prediction?homeTeam=X&awayTeam=Y — get ML prediction for a match
+router.get('/prediction', async (req, res) => {
+    const { homeTeam, awayTeam } = req.query;
+
+    if (!homeTeam || !awayTeam) {
+        return res.status(400).json({ error: 'homeTeam and awayTeam are required' });
+    }
+
+    try {
+        const response = await axios.post('http://localhost:8000/predict', {
+            homeTeam,
+            awayTeam
+        });
+        res.json(response.data);
+    } catch (error) {
+        console.error('ML API error:', error.message);
+        res.status(503).json({ error: 'Prediction service unavailable' });
     }
 });
 
