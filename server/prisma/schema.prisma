@@ -23,24 +23,28 @@ model User {
 }
 
 model Team {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  shortName String?
-  logoUrl   String?
-  homeMatches Match[] @relation("HomeTeam")
-  awayMatches Match[] @relation("AwayTeam")
+  id          Int       @id @default(autoincrement())
+  externalId  Int       @unique
+  name        String    @unique
+  shortName   String?
+  logoUrl     String?
+  homeMatches Match[]   @relation("HomeTeam")
+  awayMatches Match[]   @relation("AwayTeam")
 }
 
 model Match {
   id          Int        @id @default(autoincrement())
+  externalId  Int        @unique
   homeTeam    Team       @relation("HomeTeam", fields: [homeTeamId], references: [id])
-  homeTeamId  Int        
+  homeTeamId  Int
   awayTeam    Team       @relation("AwayTeam", fields: [awayTeamId], references: [id])
-  awayTeamId  Int        
-  HomeScore   Int?
+  awayTeamId  Int
+  homeScore   Int?
   awayScore   Int?
-  result      String?      // HOME | AWAY | DRAW — null until match is finished
+  result      String?    // HOME | AWAY | DRAW — null until match is finished
+  status      String?    // SCHEDULED | TIMED | IN_PLAY | FINISHED
   date        DateTime
+  updatedAt   DateTime   @updatedAt
   predictions Prediction[]
 }
 

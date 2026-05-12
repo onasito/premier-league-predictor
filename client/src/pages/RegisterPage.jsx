@@ -21,7 +21,7 @@ function RegisterPage() {
 
     try {
       const res = await axios.post('http://localhost:5000/auth/register', { username, email, password })
-      login(res.data.token)
+      login(res.data.token, res.data.user)
       navigate('/')
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.')
@@ -45,7 +45,7 @@ function RegisterPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="e.g. onasisjr"
+              placeholder="e.g. rambo1234"
               required
             />
           </div>

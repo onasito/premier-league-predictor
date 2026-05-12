@@ -18,36 +18,16 @@ router.post('/', verifyToken, async (req, res) => {
     }
 
     try {
-        // Upsert home and away teams by name
-        const home = await prisma.team.upsert({
-            where: { name: homeTeam },
-            update: {},
-            create: { name: homeTeam }
-        });
-
-        const away = await prisma.team.upsert({
-            where: { name: awayTeam },
-            update: {},
-            create: { name: awayTeam }
-        });
-
-        // Upsert match using the external API match ID as the primary key
-        const match = await prisma.match.upsert({
-            where: { id: matchId },
-            update: {},
-            create: {
-                id: matchId,
-                homeTeamId: home.id,
-                awayTeamId: away.id,
-                date: new Date(matchDate)
-            }
-        });
+        // Match must already exist in DB (saved when /upcoming was called)
+        const match = await prisma.match.findUnique({ where: { id: matchId } });
+        if (!match) {
+            return res.status(404).json({ error: 'Match not found' });
+        }
 
         // Prevent duplicate predictions from the same user for the same match
         const existing = await prisma.prediction.findFirst({
             where: { userId: req.userId, matchId: match.id }
         });
-
         if (existing) {
             return res.status(409).json({ error: 'You have already predicted this match' });
         }

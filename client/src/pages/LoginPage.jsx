@@ -20,7 +20,7 @@ function LoginPage() {
 
     try {
       const res = await axios.post('http://localhost:5000/auth/login', { email, password })
-      login(res.data.token)
+      login(res.data.token, res.data.user)
       navigate('/')
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.')
