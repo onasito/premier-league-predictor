@@ -8,6 +8,7 @@ import profileRoutes from './routes/profileRoutes.js';
 import matchRoutes from './routes/matchRoutes.js';
 import predictionRoutes from './routes/predictionRoutes.js';
 import leaderboardRoutes from './routes/leaderboardRoutes.js';
+import standingsRoutes from './routes/standingsRoutes.js';
 
 
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.use('/user', profileRoutes);
 app.use('/matches', matchRoutes);
 app.use('/predictions', predictionRoutes);
 app.use('/leaderboard', leaderboardRoutes);
+app.use('/standings', standingsRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Premier League Predictor API');

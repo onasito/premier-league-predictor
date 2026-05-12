@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET,
             { expiresIn: '24h' });
         // send the token to the user
-        res.json({ token });
+        res.json({ token, user: { id: user.id, username: user.username } });
     } catch (error) {
         console.log(error.message)
         res.sendStatus(503);
@@ -51,10 +51,9 @@ router.post('/login', async (req, res) => {
         // successful authentication, create a token
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET,
             { expiresIn: '24h' });
-        res.json({ token });
+        res.json({ token, user: { id: user.id, username: user.username } });
     } catch (error) {
         console.log(error.message);
-        // send a JSON error message instead of just the status text
         res.status(503).send({ message: 'Service unavailable' });
     }
 });

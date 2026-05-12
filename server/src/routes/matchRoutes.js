@@ -7,43 +7,88 @@ dotenv.config();
 
 const router = express.Router();
 
-// GET /matches/upcoming — fetch today's matches from external API
+const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+
+function formatMatchForClient(match) {
+    return {
+        id: match.id,
+        utcDate: match.date.toISOString(),
+        status: match.status,
+        competition: { name: 'Premier League' },
+        homeTeam: { id: match.homeTeamId, name: match.homeTeam.name, shortName: match.homeTeam.shortName },
+        awayTeam: { id: match.awayTeamId, name: match.awayTeam.name, shortName: match.awayTeam.shortName },
+    };
+}
+
+// GET /matches/upcoming — fetch PL matches from today through the next 7 days
 router.get('/upcoming', async (req, res) => {
     try {
         const now = new Date();
-        const offsetDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-        //const today = offsetDate.toISOString().split('T')[0];
-        const today = '2026-05-02'; // Hardcoded for testing
+        const dateFrom = new Date(now);
+        dateFrom.setHours(0, 0, 0, 0);
+        const dateTo = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        dateTo.setHours(23, 59, 59, 999);
 
-        const response = await axios.get('https://api.football-data.org/v4/matches', {
-           headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY },
+        // Check for a recently cached match in this range
+        const cacheThreshold = new Date(Date.now() - CACHE_TTL_MS);
+        const freshMatch = await prisma.match.findFirst({
+            where: { date: { gte: dateFrom, lte: dateTo }, updatedAt: { gte: cacheThreshold } }
         });
 
-        const allowedCompetitions = ['PL'];
-
-        const todaysMatches = response.data.matches.filter(
-            (match) => match.utcDate.startsWith(today) && allowedCompetitions.includes(match.competition.code)
-        );
-
-        if (todaysMatches.length === 0) {
-            return res.json({ message: 'No matches scheduled for today' });
+        if (freshMatch) {
+            const matches = await prisma.match.findMany({
+                where: { date: { gte: dateFrom, lte: dateTo } },
+                include: { homeTeam: true, awayTeam: true },
+                orderBy: { date: 'asc' }
+            });
+            return res.json({ matches: matches.map(formatMatchForClient) });
         }
 
-        const formattedMatches = todaysMatches.map((match) => ({
-            competition: match.competition.name,
-            homeTeam: match.homeTeam.name,
-            awayTeam: match.awayTeam.name,
-            matchTime: new Date(match.utcDate).toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'America/Los_Angeles',
-            }),
-            status: match.status,
-        }));
+        // Cache is stale — fetch from API and save to DB
+        const dateFromStr = now.toISOString().split('T')[0];
+        const dateToStr = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        res.json({ matches: todaysMatches });
+        const response = await axios.get('https://api.football-data.org/v4/competitions/PL/matches', {
+            headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY },
+            params: { dateFrom: dateFromStr, dateTo: dateToStr }
+        });
+
+        const apiMatches = response.data.matches ?? [];
+        console.log('Fetched from API:', apiMatches.length, 'matches');
+
+        for (const match of apiMatches) {
+            const homeTeam = await prisma.team.upsert({
+                where: { externalId: match.homeTeam.id },
+                update: { name: match.homeTeam.name, shortName: match.homeTeam.shortName ?? null },
+                create: { externalId: match.homeTeam.id, name: match.homeTeam.name, shortName: match.homeTeam.shortName ?? null }
+            });
+            const awayTeam = await prisma.team.upsert({
+                where: { externalId: match.awayTeam.id },
+                update: { name: match.awayTeam.name, shortName: match.awayTeam.shortName ?? null },
+                create: { externalId: match.awayTeam.id, name: match.awayTeam.name, shortName: match.awayTeam.shortName ?? null }
+            });
+            await prisma.match.upsert({
+                where: { externalId: match.id },
+                update: { status: match.status, date: new Date(match.utcDate) },
+                create: {
+                    externalId: match.id,
+                    homeTeamId: homeTeam.id,
+                    awayTeamId: awayTeam.id,
+                    date: new Date(match.utcDate),
+                    status: match.status
+                }
+            });
+        }
+
+        const matches = await prisma.match.findMany({
+            where: { date: { gte: dateFrom, lte: dateTo } },
+            include: { homeTeam: true, awayTeam: true },
+            orderBy: { date: 'asc' }
+        });
+
+        res.json({ matches: matches.map(formatMatchForClient) });
     } catch (error) {
-        console.error('Error fetching matches:', error.message);
+        console.error('Error fetching matches:', error);
         res.status(500).json({ error: 'Failed to fetch matches' });
     }
 });

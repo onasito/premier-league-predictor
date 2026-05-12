@@ -20,3 +20,4 @@ The **Premier League Match Predictor** is a full-stack web application where use
 - **Backend:** Node.js, Express.js
 - **Database:** PostgreSQL (with Prisma ORM or Sequelize)
 - **Authentication:** JSON Web Tokens (JWT)
+- **ML** Premier League Data used from https://football-data.co.uk/

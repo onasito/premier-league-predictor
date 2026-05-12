@@ -7,23 +7,23 @@
 .mypredictions-page h1 {
   font-size: 32px;
   font-weight: 800;
-  color: #e8d5ff;
+  color: #1a1a2e;
   margin-bottom: 32px;
 }
 
 .mypredictions-status {
   text-align: center;
   padding: 80px 32px;
-  color: #8b7aa6;
+  color: #909099;
   font-size: 18px;
 }
 
 .mypredictions-status.error {
-  color: #fca5a5;
+  color: #ef4444;
 }
 
 .mypredictions-status a {
-  color: #c084fc;
+  color: #f87171;
   text-decoration: none;
   font-weight: 600;
 }
@@ -36,8 +36,8 @@
 }
 
 .stat-card {
-  background: #1a1a2e;
-  border: 1px solid #2e2e4a;
+  background: #f5f5f7;
+  border: 1px solid #d0d0d5;
   border-radius: 12px;
   padding: 20px;
   display: flex;
@@ -49,12 +49,12 @@
 .stat-value {
   font-size: 28px;
   font-weight: 800;
-  color: #c084fc;
+  color: #f87171;
 }
 
 .stat-label {
   font-size: 13px;
-  color: #8b7aa6;
+  color: #909099;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -66,11 +66,11 @@
 }
 
 .prediction-card {
-  background: #1a1a2e;
-  border: 1px solid #2e2e4a;
+  background: #f5f5f7;
+  border: 1px solid #d0d0d5;
   border-radius: 12px;
   padding: 20px 24px;
-  border-left: 4px solid #2e2e4a;
+  border-left: 4px solid #d0d0d5;
 }
 
 .prediction-card.correct {
@@ -90,13 +90,13 @@
 
 .prediction-teams {
   font-weight: 700;
-  color: #e8d5ff;
+  color: #1a1a2e;
   font-size: 15px;
 }
 
 .prediction-date {
   font-size: 13px;
-  color: #8b7aa6;
+  color: #909099;
 }
 
 .prediction-details {
@@ -107,11 +107,11 @@
 
 .prediction-pick {
   font-size: 14px;
-  color: #8b7aa6;
+  color: #909099;
 }
 
 .prediction-pick strong {
-  color: #c9b8e8;
+  color: #4a4a5a;
 }
 
 .badge {
@@ -122,8 +122,8 @@
 }
 
 .badge.pending {
-  background: rgba(139, 122, 166, 0.15);
-  color: #8b7aa6;
+  background: rgba(144, 144, 153, 0.15);
+  color: #909099;
 }
 
 .badge.correct {

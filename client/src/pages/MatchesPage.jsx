@@ -35,14 +35,19 @@ function MatchesPage() {
         setMlPredictions(mlResults)
 
         if (isLoggedIn) {
-          const predRes = await axios.get('http://localhost:5000/predictions/my', {
-            headers: { Authorization: token }
-          })
-          const predMap = {}
-          predRes.data.forEach(p => { predMap[p.matchId] = p.predictedWinner })
-          setMyPredictions(predMap)
+          try {
+            const predRes = await axios.get('http://localhost:5000/predictions/my', {
+              headers: { Authorization: token }
+            })
+            const predMap = {}
+            predRes.data.forEach(p => { predMap[p.matchId] = p.predictedWinner })
+            setMyPredictions(predMap)
+          } catch (err) {
+            console.error('Failed to load predictions:', err.message)
+          }
         }
       } catch (err) {
+        console.error('Failed to load matches:', err)
         setError('Failed to load matches. Please try again later.')
       } finally {
         setLoading(false)
@@ -90,13 +95,33 @@ function MatchesPage() {
     return 'Draw'
   }
 
+  function groupByDate(matches) {
+    return matches.reduce((groups, match) => {
+      const day = match.utcDate.split('T')[0]
+      if (!groups[day]) groups[day] = []
+      groups[day].push(match)
+      return groups
+    }, {})
+  }
+
+  function formatDay(dateStr) {
+    const date = new Date(dateStr + 'T12:00:00')
+    const today = new Date().toISOString().split('T')[0]
+    const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0]
+    if (dateStr === today) return 'Today'
+    if (dateStr === tomorrow) return 'Tomorrow'
+    return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+  }
+
   if (loading) return <div className="matches-status">Loading matches...</div>
   if (error) return <div className="matches-status error">{error}</div>
-  if (matches.length === 0) return <div className="matches-status">No matches scheduled for today.</div>
+  if (matches.length === 0) return <div className="matches-status">No matches scheduled in the next 7 days.</div>
+
+  const grouped = groupByDate(matches)
 
   return (
     <div className="matches-page">
-      <h1>Today's Matches</h1>
+      <h1>Upcoming Matches</h1>
 
       {!isLoggedIn && (
         <p className="login-prompt">
@@ -104,8 +129,11 @@ function MatchesPage() {
         </p>
       )}
 
-      <div className="matches-list">
-        {matches.map(match => {
+      {Object.entries(grouped).map(([day, dayMatches]) => (
+        <div key={day} className="match-day-group">
+          <h2 className="match-day-header">{formatDay(day)}</h2>
+          <div className="matches-list">
+            {dayMatches.map(match => {
           const prediction = myPredictions[match.id]
           const isSubmitting = submitting === match.id
           const ml = mlPredictions[match.id]
@@ -165,9 +193,11 @@ function MatchesPage() {
                 ) : null}
               </div>
             </div>
-          )
-        })}
-      </div>
+            )
+          })}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

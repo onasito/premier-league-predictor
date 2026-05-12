@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from predict import predict_match
 
+### FastAPI app and request model
+### py -m uvicorn api:app --reload to run the server
 app = FastAPI()
 
 class MatchRequest(BaseModel):

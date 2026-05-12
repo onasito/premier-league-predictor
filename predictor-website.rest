@@ -163,3 +163,7 @@ X-Auth-Token: a0485d6d198fbfcd2d9f6d249b21d3d8
 
 ### Get all teams in the Premier League
 GET https://api.football-data.org/v4/competitions/PL/matches
+
+### GET standings for Premier League
+GET https://api.football-data.org/v4/competitions/PL/standings
+X-Auth-Token: a21a83aa01c74c49af35702510d17a38
