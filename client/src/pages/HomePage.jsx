@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api'
 import { useAuth } from '../context/AuthContext'
 import './HomePage.css'
 
@@ -90,7 +90,7 @@ function HomePage() {
   useEffect(() => {
     async function fetchStandings() {
       try {
-        const res = await axios.get('http://localhost:5000/standings')
+        const res = await api.get('/standings')
         setTable(res.data.table)
       } catch (err) {
         console.error('Failed to fetch standings:', err.message)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api'
 import { useAuth } from '../context/AuthContext'
 import './MyPredictionsPage.css'
 
@@ -14,7 +14,7 @@ function MyPredictionsPage() {
   useEffect(() => {
     async function fetchPredictions() {
       try {
-        const res = await axios.get('http://localhost:5000/predictions/my', {
+        const res = await api.get('/predictions/my', {
           headers: { Authorization: token }
         })
         setPredictions(res.data)

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api'
 import { useAuth } from '../context/AuthContext'
 import './Auth.css'
 
@@ -20,7 +20,7 @@ function RegisterPage() {
     setLoading(true)
 
     try {
-      const res = await axios.post('http://localhost:5000/auth/register', { username, email, password })
+      const res = await api.post('/auth/register', { username, email, password })
       login(res.data.token, res.data.user)
       navigate('/')
     } catch (err) {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api'
 import { useAuth } from '../context/AuthContext'
 import { FaChartBar, FaFutbol, FaTrophy, FaSignOutAlt, FaHome } from 'react-icons/fa'
 import './SidePanel.css'
@@ -19,7 +19,7 @@ function SidePanel() {
     setError('')
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/auth/login', { email, password })
+      const res = await api.post('/auth/login', { email, password })
       login(res.data.token, res.data.user)
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed.')

@@ -102,7 +102,7 @@ router.get('/prediction', async (req, res) => {
     }
 
     try {
-        const response = await axios.post('http://localhost:8000/predict', {
+        const response = await axios.post(`${process.env.ML_SERVICE_URL}/predict`, {
             homeTeam,
             awayTeam
         });

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import api from '../api'
 import './LeaderboardPage.css'
 
 function LeaderboardPage() {
@@ -10,7 +10,7 @@ function LeaderboardPage() {
   useEffect(() => {
     async function fetchLeaderboard() {
       try {
-        const res = await axios.get('http://localhost:5000/leaderboard')
+        const res = await api.get('/leaderboard')
         setLeaderboard(res.data)
       } catch (err) {
         setError('Failed to load leaderboard. Please try again later.')

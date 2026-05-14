@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import api from '../api'
 import { useAuth } from '../context/AuthContext'
 import './MatchesPage.css'
 
@@ -16,7 +16,7 @@ function MatchesPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const matchRes = await axios.get('http://localhost:5000/matches/upcoming')
+        const matchRes = await api.get('/matches/upcoming')
         const matchList = matchRes.data.matches || []
         setMatches(matchList)
 
@@ -24,7 +24,7 @@ function MatchesPage() {
         const mlResults = {}
         await Promise.all(matchList.map(async (match) => {
           try {
-            const res = await axios.get('http://localhost:5000/matches/prediction', {
+            const res = await api.get('/matches/prediction', {
               params: { homeTeam: match.homeTeam.name, awayTeam: match.awayTeam.name }
             })
             mlResults[match.id] = res.data
@@ -36,7 +36,7 @@ function MatchesPage() {
 
         if (isLoggedIn) {
           try {
-            const predRes = await axios.get('http://localhost:5000/predictions/my', {
+            const predRes = await api.get('/predictions/my', {
               headers: { Authorization: token }
             })
             const predMap = {}
@@ -62,7 +62,7 @@ function MatchesPage() {
     setSubmitting(match.id)
 
     try {
-      await axios.post('http://localhost:5000/predictions', {
+      await api.post('/predictions', {
         matchId: match.id,
         homeTeam: match.homeTeam.name,
         awayTeam: match.awayTeam.name,
