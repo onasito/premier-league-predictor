@@ -7,7 +7,7 @@ dotenv.config();
 
 const router = express.Router();
 
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 function formatMatchForClient(match) {
     return {
@@ -159,5 +159,56 @@ router.post('/:id/result', async (req, res) => {
         res.status(503).json({ error: 'Service unavailable' });
     }
 });
+
+const WINNER_MAP = { HOME_TEAM: 'HOME', AWAY_TEAM: 'AWAY', DRAW: 'DRAW' };
+
+export async function syncFinishedMatches() {
+    try {
+        const now = new Date();
+        const dateFrom = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+        const dateFromStr = dateFrom.toISOString().split('T')[0];
+        const dateToStr = now.toISOString().split('T')[0];
+
+        const response = await axios.get('https://api.football-data.org/v4/competitions/PL/matches', {
+            headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY },
+            params: { dateFrom: dateFromStr, dateTo: dateToStr, status: 'FINISHED' }
+        });
+
+        const finishedMatches = response.data.matches ?? [];
+        console.log(`[sync] ${finishedMatches.length} finished matches found`);
+
+        for (const apiMatch of finishedMatches) {
+            const match = await prisma.match.findUnique({ where: { externalId: apiMatch.id } });
+            if (!match || match.result) continue;
+
+            const result = WINNER_MAP[apiMatch.score?.winner];
+            if (!result) continue;
+
+            await prisma.match.update({
+                where: { id: match.id },
+                data: {
+                    result,
+                    status: 'FINISHED',
+                    homeScore: apiMatch.score.fullTime.home,
+                    awayScore: apiMatch.score.fullTime.away
+                }
+            });
+
+            const predictions = await prisma.prediction.findMany({ where: { matchId: match.id } });
+
+            await Promise.all(predictions.map((p) =>
+                prisma.prediction.update({
+                    where: { id: p.id },
+                    data: { pointsEarned: p.predictedWinner === result ? 3 : 0 }
+                })
+            ));
+
+            const correct = predictions.filter(p => p.predictedWinner === result).length;
+            console.log(`[sync] Match ${match.id} settled: ${result} — ${correct}/${predictions.length} correct`);
+        }
+    } catch (error) {
+        console.error('[sync] Failed to sync finished matches:', error.message);
+    }
+}
 
 export default router;

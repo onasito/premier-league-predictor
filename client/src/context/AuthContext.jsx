@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../api'
 
 const AuthContext = createContext(null)
 
@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const interceptor = axios.interceptors.response.use(
+    const interceptor = api.interceptors.response.use(
       response => response,
       error => {
         if (error.response?.status === 401) {
@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
         return Promise.reject(error)
       }
     )
-    return () => axios.interceptors.response.eject(interceptor)
+    return () => api.interceptors.response.eject(interceptor)
   }, [])
 
   return (

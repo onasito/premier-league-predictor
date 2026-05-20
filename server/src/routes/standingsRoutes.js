@@ -30,4 +30,17 @@ router.get('/', async (req, res) => {
     }
 });
 
+export async function warmStandingsCache() {
+    try {
+        const response = await axios.get('https://api.football-data.org/v4/competitions/PL/standings', {
+            headers: { 'X-Auth-Token': process.env.FOOTBALL_DATA_API_KEY }
+        });
+        const table = response.data.standings.find(s => s.type === 'TOTAL')?.table ?? [];
+        standingCache = { data: { table }, fetchedAt: Date.now() };
+        console.log('[cache] Standings pre-warmed');
+    } catch (error) {
+        console.error('[cache] Failed to pre-warm standings:', error.message);
+    }
+}
+
 export default router;
