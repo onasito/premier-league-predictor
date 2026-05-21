@@ -1,18 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
 :root {
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --bg:         #0B0D12;
+  --surface:    #131620;
+  --surface-2:  #1A1E2E;
+  --surface-3:  #222840;
+
+  --border:       rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(255, 255, 255, 0.14);
+
+  --accent:     #00FF87;
+  --accent-dim: rgba(0, 255, 135, 0.12);
+  --accent-glow: 0 0 24px rgba(0, 255, 135, 0.28);
+
+  --purple:     #7C3AED;
+  --purple-dim: rgba(124, 58, 237, 0.18);
+
+  --gold:   #FFB800;
+  --silver: #94A3B8;
+  --bronze: #CD7F32;
+
+  --green:     #22C55E;
+  --green-dim: rgba(34, 197, 94, 0.14);
+  --red:       #EF4444;
+  --red-dim:   rgba(239, 68, 68, 0.14);
+  --orange:    #FB923C;
+  --orange-dim: rgba(251, 146, 60, 0.14);
+
+  --text:   #EEF0FF;
+  --text-2: #7A849E;
+  --text-3: #3D4560;
+
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
-  color: #1a1a2e;
-  background: #ebebed;
+  color: var(--text);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  background: var(--bg);
 }
 
 #root {
@@ -21,8 +55,25 @@ body {
 
 h1, h2, h3 {
   margin: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.04em;
+  font-weight: 400;
 }
 
-p {
-  margin: 0;
+p { margin: 0; }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
 }
+
+a:hover { text-decoration: underline; }
+
+::selection {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 3px; }

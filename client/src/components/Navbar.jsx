@@ -19,7 +19,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">PL Predictor</Link>
+      <Link to="/" className="navbar-brand">PL <span>Predictor</span></Link>
 
       <div className="navbar-right">
         <button

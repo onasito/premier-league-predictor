@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import api from '../api'
 import { useAuth } from '../context/AuthContext'
 import { FaChartBar, FaFutbol, FaTrophy, FaSignOutAlt, FaHome } from 'react-icons/fa'
@@ -36,6 +36,8 @@ function SidePanel() {
   if (isLoggedIn) {
     return (
       <aside className="side-panel">
+        <div className="panel-brand">PL <span>Predictor</span></div>
+
         <div className="profile-avatar">
           {user?.username?.[0]?.toUpperCase() ?? '?'}
         </div>
@@ -43,22 +45,22 @@ function SidePanel() {
         <h3 className="profile-name">{user?.username}</h3>
 
         <nav className="profile-nav">
-          <Link to ="/" className="profile-nav-link">
+          <NavLink to="/" end className={({ isActive }) => 'profile-nav-link' + (isActive ? ' active' : '')}>
             <FaHome className="profile-nav-icon" /> Home
-          </Link>
-          <Link to="/my-predictions" className="profile-nav-link">
+          </NavLink>
+          <NavLink to="/my-predictions" className={({ isActive }) => 'profile-nav-link' + (isActive ? ' active' : '')}>
             <FaChartBar className="profile-nav-icon" /> My Predictions
-          </Link>
-          <Link to="/matches" className="profile-nav-link">
+          </NavLink>
+          <NavLink to="/matches" className={({ isActive }) => 'profile-nav-link' + (isActive ? ' active' : '')}>
             <FaFutbol className="profile-nav-icon" /> Matches
-          </Link>
-          <Link to="/leaderboard" className="profile-nav-link">
+          </NavLink>
+          <NavLink to="/leaderboard" className={({ isActive }) => 'profile-nav-link' + (isActive ? ' active' : '')}>
             <FaTrophy className="profile-nav-icon" /> Leaderboard
-          </Link>
+          </NavLink>
         </nav>
 
         <button className="btn-logout" onClick={handleLogout}>
-          <FaSignOutAlt style={{ marginRight: 8 }} /> Log Out
+          <FaSignOutAlt /> Log Out
         </button>
       </aside>
     )
@@ -66,6 +68,8 @@ function SidePanel() {
 
   return (
     <aside className="side-panel">
+      <div className="panel-brand">PL <span>Predictor</span></div>
+
       <h3 className="auth-panel-title">Sign In</h3>
       <p className="auth-panel-sub">Log in to make your predictions</p>
 
