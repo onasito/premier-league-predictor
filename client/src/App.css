@@ -1,15 +1,19 @@
 .app-layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 24px;
-  padding: 24px;
+  grid-template-columns: 1fr 272px;
+  gap: 20px;
+  padding: 20px;
   min-height: 100vh;
   align-items: start;
+  max-width: 1160px;
+  margin: 0 auto;
 }
 
 @media (max-width: 900px) {
   .app-layout {
     grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 0;
   }
 
   .app-layout > aside {

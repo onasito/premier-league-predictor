@@ -1,195 +1,226 @@
 .matches-page {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 40px;
 }
 
 .matches-page h1 {
-  font-size: 32px;
-  font-weight: 800;
-  color: #1a1a2e;
-  margin-bottom: 8px;
+  font-size: 3rem;
+  color: var(--text);
 }
 
 .login-prompt {
-  color: #909099;
-  font-size: 15px;
-  margin-bottom: 32px;
+  font-size: 0.86rem;
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 18px;
 }
 
 .login-prompt a {
-  color: #f87171;
-  text-decoration: none;
+  color: var(--accent);
   font-weight: 600;
 }
 
-.login-prompt a:hover {
-  text-decoration: underline;
-}
-
 .matches-status {
+  padding: 60px 20px;
   text-align: center;
-  padding: 80px 32px;
-  color: #909099;
-  font-size: 18px;
+  color: var(--text-2);
+  font-size: 0.95rem;
 }
 
 .matches-status.error {
-  color: #ef4444;
+  color: var(--red);
 }
 
 .match-day-group {
-  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .match-day-header {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #fca5a5;
-  margin: 0 0 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #d0d0d5;
+  font-size: 1.35rem;
+  color: var(--text-3);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin: 0;
 }
 
 .matches-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
+/* ── Match card ── */
 .match-card {
-  background: #f5f5f7;
-  border: 1px solid #d0d0d5;
-  border-radius: 12px;
-  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.2s;
+}
+
+.match-card:hover {
+  border-color: var(--border-hover);
 }
 
 .match-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
 }
 
 .competition {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 0.65rem;
+  color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
-  padding: 4px 10px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  background: var(--accent-dim);
+  padding: 3px 10px;
   border-radius: 20px;
 }
 
 .match-time {
-  font-size: 13px;
-  color: #909099;
+  font-size: 0.76rem;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
 }
 
 .match-teams {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.team {
-  font-size: 17px;
-  font-weight: 700;
-  color: #1a1a2e;
-  flex: 1;
-}
-
-.team.home {
-  text-align: left;
-}
-
-.team.away {
-  text-align: right;
-}
-
-.vs {
-  font-size: 13px;
-  color: #b0b0ba;
-  font-weight: 600;
-  padding: 0 16px;
-}
-
-.predict-buttons {
-  display: flex;
   gap: 10px;
 }
 
-.btn-predict {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #d0d0d5;
-  border-radius: 8px;
-  background: transparent;
-  color: #4a4a5a;
-  font-size: 14px;
+.team {
+  font-size: 0.94rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-  font-family: inherit;
+  color: var(--text);
 }
 
-.btn-predict:hover:not(:disabled) {
-  background: rgba(248, 113, 113, 0.1);
-  border-color: #fca5a5;
-  color: #1a1a2e;
+.team.home { text-align: right; }
+.team.away { text-align: left; }
+
+.vs {
+  font-size: 0.68rem;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: var(--surface-2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
 }
 
-.btn-predict:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.prediction-made {
-  font-size: 14px;
-  color: #909099;
-  text-align: center;
-  padding: 10px;
-  background: rgba(248, 113, 113, 0.06);
-  border: 1px solid rgba(248, 113, 113, 0.2);
-  border-radius: 8px;
-}
-
-.prediction-made strong {
-  color: #f87171;
-}
-
+/* ── ML prediction strip ── */
 .ml-prediction {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(248, 113, 113, 0.06);
-  border: 1px solid rgba(248, 113, 113, 0.2);
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin-bottom: 12px;
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 9px 13px;
   flex-wrap: wrap;
 }
 
 .ml-label {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 0.68rem;
+  color: var(--text-3);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #909099;
+  letter-spacing: 1px;
 }
 
 .ml-pick {
-  font-size: 14px;
-  font-weight: 700;
-  color: #f87171;
+  font-size: 0.82rem;
+  color: var(--text);
+  font-weight: 600;
 }
 
 .ml-probs {
-  font-size: 12px;
-  color: #909099;
+  font-size: 0.73rem;
+  color: var(--text-3);
   margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Predict buttons — the main interaction ── */
+.match-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.predict-buttons {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+}
+
+.btn-predict {
+  padding: 12px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s, transform 0.1s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-predict.home:hover:not(:disabled) {
+  background: var(--green-dim);
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.18);
+}
+
+.btn-predict.draw:hover:not(:disabled) {
+  background: var(--purple-dim);
+  border-color: var(--purple);
+  color: #a78bfa;
+  box-shadow: 0 0 18px rgba(124, 58, 237, 0.18);
+}
+
+.btn-predict.away:hover:not(:disabled) {
+  background: var(--orange-dim);
+  border-color: var(--orange);
+  color: var(--orange);
+  box-shadow: 0 0 18px rgba(251, 146, 60, 0.18);
+}
+
+.btn-predict:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-predict:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.prediction-made {
+  text-align: center;
+  font-size: 0.83rem;
+  color: var(--text-2);
+  background: var(--accent-dim);
+  border: 1px solid rgba(0, 255, 135, 0.15);
+  border-radius: 10px;
+  padding: 11px;
+}
+
+.prediction-made strong {
+  color: var(--accent);
 }
