@@ -3,6 +3,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
 import cors from 'cors';
+import axios from 'axios';
 import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import matchRoutes, { syncFinishedMatches } from './routes/matchRoutes.js';
@@ -34,10 +35,22 @@ app.get('/', (req, res) => {
 });
 
 const SYNC_INTERVAL_MS = 30 * 60 * 1000;
+const ML_KEEPALIVE_MS = 10 * 60 * 1000; // 10 minutes — keeps Render free tier awake
+
+async function pingMlService() {
+    try {
+        await axios.get(`${process.env.ML_SERVICE_URL}/health`, { timeout: 5000 });
+        console.log('[ml] keep-alive ping ok');
+    } catch {
+        console.warn('[ml] keep-alive ping failed — service may be waking up');
+    }
+}
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     warmStandingsCache();
     syncFinishedMatches();
     setInterval(syncFinishedMatches, SYNC_INTERVAL_MS);
+    pingMlService();
+    setInterval(pingMlService, ML_KEEPALIVE_MS);
 });

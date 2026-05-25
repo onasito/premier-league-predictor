@@ -10,6 +10,10 @@ class MatchRequest(BaseModel):
     homeTeam: str
     awayTeam: str
 
+@app.get('/health')
+def health():
+    return {'status': 'ok'}
+
 @app.post('/predict')
 def predict(request: MatchRequest):
     try:

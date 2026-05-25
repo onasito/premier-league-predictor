@@ -1,6 +1,9 @@
+import os
 import pandas as pd
 import glob
 import joblib
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Map full team names to the abbreviations used in the dataset
 TEAM_NAME_MAP = {
@@ -32,10 +35,10 @@ def normalize_team(name):
     return TEAM_NAME_MAP.get(name, name)
 
 # load the trained model
-model = joblib.load('model.pkl')
+model = joblib.load(os.path.join(BASE_DIR, 'model.pkl'))
 
 # load historical data to calculate rolling form
-files = glob.glob('data/*.csv')
+files = glob.glob(os.path.join(BASE_DIR, 'data', '*.csv'))
 df = pd.concat([pd.read_csv(f) for f in files], ignore_index=True)
 df = df.dropna(subset=['FTR'])
 df = df[['Date', 'HomeTeam', 'AwayTeam', 'FTHG', 'FTAG', 'FTR']]
