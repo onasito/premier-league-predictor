@@ -5,6 +5,7 @@ npm-debug.log
 
 # Prisma
 prisma/dev.db
+src/generated/
 
 # OS / Editor junk
 .DS_Store
