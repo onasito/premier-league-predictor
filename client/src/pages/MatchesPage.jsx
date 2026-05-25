@@ -21,18 +21,32 @@ function MatchesPage() {
         setMatches(matchList)
 
         // fetch ML prediction for each match
-        const mlResults = {}
-        await Promise.all(matchList.map(async (match) => {
-          try {
-            const res = await api.get('/matches/prediction', {
-              params: { homeTeam: match.homeTeam.name, awayTeam: match.awayTeam.name }
-            })
-            mlResults[match.id] = res.data
-          } catch {
-            mlResults[match.id] = null
-          }
-        }))
+        const fetchMlPredictions = async (list) => {
+          const results = {}
+          await Promise.all(list.map(async (match) => {
+            try {
+              const res = await api.get('/matches/prediction', {
+                params: { homeTeam: match.homeTeam.name, awayTeam: match.awayTeam.name }
+              })
+              results[match.id] = res.data
+            } catch {
+              results[match.id] = null
+            }
+          }))
+          return results
+        }
+
+        const mlResults = await fetchMlPredictions(matchList)
         setMlPredictions(mlResults)
+
+        // If all predictions failed (service waking up), retry once after 60s
+        const allFailed = matchList.length > 0 && matchList.every(m => mlResults[m.id] === null)
+        if (allFailed) {
+          setTimeout(async () => {
+            const retried = await fetchMlPredictions(matchList)
+            setMlPredictions(retried)
+          }, 60000)
+        }
 
         if (isLoggedIn) {
           try {
