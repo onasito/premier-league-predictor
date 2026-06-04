@@ -28,6 +28,32 @@ def get_rolling_win_pct(df, team, date, n=5):
     ).sum()
     return wins / len(past)
 
+def get_home_win_pct(df, team, date, n=5):
+    past = df[df['HomeTeam'] == team]
+    past = past[past['Date'] < date].tail(n)
+    if len(past) == 0:
+        return 0.5
+    wins = past[past['FTR'] == 'H'].shape[0]
+    return wins / len(past)
+
+def get_away_win_pct(df, team, date, n=5):
+    past = df[df['AwayTeam'] == team]
+    past = past[past['Date'] < date].tail(n)
+    if len(past) == 0:
+        return 0.5
+    wins = past[past['FTR'] == 'A'].shape[0]
+    return wins / len(past)
+
+def get_avg_goals_scored(df, team, date, venue, n=5):
+    if venue == "Home":
+        past = df[df['HomeTeam'] == team]
+    else:
+        past = df[df['AwayTeam'] == team]
+    past = past[past['Date'] < date].tail(n)
+    if len(past) == 0:
+        return 0
+    return past['FTHG'].mean() if venue == "Home" else past['FTAG'].mean()
+
 df['home_win_pct'] = df.apply(lambda row: get_rolling_win_pct(df, row['HomeTeam'], row['Date']), axis=1)
 df['away_win_pct'] = df.apply(lambda row: get_rolling_win_pct(df, row['AwayTeam'], row['Date']), axis=1)
 
