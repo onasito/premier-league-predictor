@@ -46,9 +46,38 @@ The React frontend communicates with the Express backend for all user, match, an
 
 ## ML Model
 
-The prediction model is trained on historical Premier League match data from [football-data.co.uk](https://football-data.co.uk/). It uses rolling team performance statistics as features to predict match outcomes (home win / draw / away win).
+The prediction model is trained on historical Premier League match data from [football-data.co.uk](https://football-data.co.uk/) and predicts match outcomes across three classes: home win (H), draw (D), and away win (A).
 
-> Model details and accuracy metrics will be updated once current improvements are complete.
+**Accuracy: ~55% (5-fold cross-validated)** — compared to a ~45-50% naive baseline of always predicting the home team to win.
+
+### Model
+
+XGBoost classifier, upgraded from an initial logistic regression baseline. XGBoost was chosen for its ability to capture non-linear relationships between features and handle noisy sports data well.
+
+### Features
+
+| Feature | Description |
+|---|---|
+| `home_win_pct`, `away_win_pct` | Win % over last 5 home/away games |
+| `home_win_pct_3`, `away_win_pct_3` | Win % over last 3 games (short-term momentum) |
+| `home_win_pct_10`, `away_win_pct_10` | Win % over last 10 games (overall quality) |
+| `home_overall_win_pct`, `away_overall_win_pct` | Win % across all games regardless of venue |
+| `home_avg_goals_scored`, `away_avg_goals_scored` | Avg goals scored over last 5 games |
+| `home_avg_goals_conceded`, `away_avg_goals_conceded` | Avg goals conceded over last 5 games |
+| `home_attack_vs_away_defense` | Home goals scored minus away goals conceded |
+| `away_attack_vs_home_defense` | Away goals scored minus home goals conceded |
+| `h2h_win_pct` | Head-to-head win % over last 5 meetings |
+| `draw_pct` | Draw rate over last 38 games (captures team style) |
+| `b365_home_prob`, `b365_draw_prob`, `b365_away_prob` | Bet365 implied probabilities (normalized) |
+
+Bookmaker implied probabilities were the single biggest accuracy improvement, encoding information such as injuries, squad depth, and form that isn't captured by raw statistics alone.
+
+### Hyperparameters
+
+```
+n_estimators=300, max_depth=3, learning_rate=0.01,
+min_child_weight=1, reg_lambda=1, subsample=0.8, colsample_bytree=0.8
+```
 
 ---
 
