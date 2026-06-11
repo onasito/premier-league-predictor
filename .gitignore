@@ -4,3 +4,4 @@ __pycache__/
 .env
 *.rest
 .venv/
+ml/feature_importance.png

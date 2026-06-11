@@ -9,6 +9,9 @@ app = FastAPI()
 class MatchRequest(BaseModel):
     homeTeam: str
     awayTeam: str
+    b365H: float
+    b365D: float
+    b365A: float
 
 @app.get('/health')
 def health():
@@ -17,7 +20,7 @@ def health():
 @app.post('/predict')
 def predict(request: MatchRequest):
     try:
-        result = predict_match(request.homeTeam, request.awayTeam)
+        result = predict_match(request.homeTeam, request.awayTeam, request.b365H, request.b365D, request.b365A)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
