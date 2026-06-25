@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import api from '../api'
 import { useAuth } from '../context/AuthContext'
-import { FaChartBar, FaFutbol, FaTrophy, FaSignOutAlt, FaHome } from 'react-icons/fa'
+import { FaChartBar, FaFutbol, FaTrophy, FaSignOutAlt, FaHome, FaBolt } from 'react-icons/fa'
 import './SidePanel.css'
 
 function SidePanel() {
@@ -56,6 +56,9 @@ function SidePanel() {
           </NavLink>
           <NavLink to="/leaderboard" className={({ isActive }) => 'profile-nav-link' + (isActive ? ' active' : '')}>
             <FaTrophy className="profile-nav-icon" /> Leaderboard
+          </NavLink>
+          <NavLink to="/power-rankings" className={({ isActive }) => 'profile-nav-link' + (isActive ? ' active' : '')}>
+            <FaBolt className="profile-nav-icon" /> Power Rankings
           </NavLink>
         </nav>
 

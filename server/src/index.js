@@ -10,6 +10,7 @@ import matchRoutes, { syncFinishedMatches } from './routes/matchRoutes.js';
 import predictionRoutes from './routes/predictionRoutes.js';
 import leaderboardRoutes from './routes/leaderboardRoutes.js';
 import standingsRoutes, { warmStandingsCache } from './routes/standingsRoutes.js';
+import powerRankingsRoutes from './routes/powerRankingsRoutes.js';
 
 
 const PORT = process.env.PORT || 5000;
@@ -29,6 +30,7 @@ app.use('/matches', matchRoutes);
 app.use('/predictions', predictionRoutes);
 app.use('/leaderboard', leaderboardRoutes);
 app.use('/standings', standingsRoutes);
+app.use('/power-rankings', powerRankingsRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Premier League Predictor API');

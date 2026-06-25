@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { FaChartBar, FaFutbol, FaTrophy } from 'react-icons/fa'
+import { FaChartBar, FaFutbol, FaTrophy, FaBolt } from 'react-icons/fa'
 import './Navbar.css'
 
 function Navbar() {
@@ -42,6 +42,9 @@ function Navbar() {
               </Link>
               <Link to="/leaderboard" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
                 <FaTrophy /> Leaderboard
+              </Link>
+              <Link to="/power-rankings" className="dropdown-link" onClick={() => setDropdownOpen(false)}>
+                <FaBolt /> Power Rankings
               </Link>
               <button className="dropdown-logout" onClick={handleLogout}>
                 Log Out
