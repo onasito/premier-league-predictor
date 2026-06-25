@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import 'dotenv/config';
 import cors from 'cors';
 import axios from 'axios';
+import rateLimit from 'express-rate-limit';
 import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import matchRoutes, { syncFinishedMatches } from './routes/matchRoutes.js';
@@ -23,14 +24,26 @@ const __dirname = dirname(__filename);
 app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }));
 app.use(express.json());
 
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    message: { error: 'Too many requests, please try again later.' }
+});
+
+const mlLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 10,
+    message: { error: 'Too many requests, please try again later.' }
+});
+
 // Routes
-app.use('/auth', authRoutes);
+app.use('/auth', authLimiter, authRoutes);
 app.use('/user', profileRoutes);
-app.use('/matches', matchRoutes);
+app.use('/matches', mlLimiter, matchRoutes);
 app.use('/predictions', predictionRoutes);
 app.use('/leaderboard', leaderboardRoutes);
 app.use('/standings', standingsRoutes);
-app.use('/power-rankings', powerRankingsRoutes);
+app.use('/power-rankings', mlLimiter, powerRankingsRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Premier League Predictor API');
