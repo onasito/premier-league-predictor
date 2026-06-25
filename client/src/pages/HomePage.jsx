@@ -30,7 +30,7 @@ function MobileLoginPrompt() {
   )
 }
 
-function AnalyticsPanel({ table }) {
+function AnalyticsPanel({ table = [] }) {
   const top6 = table.slice(0, 6)
   const maxPoints = top6[0]?.points || 1
 
@@ -91,7 +91,7 @@ function HomePage() {
     async function fetchStandings() {
       try {
         const res = await api.get('/standings')
-        setTable(res.data.table)
+        setTable(res.data.table ?? [])
       } catch (err) {
         console.error('Failed to fetch standings:', err.message)
       }
