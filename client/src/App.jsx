@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage'
 import MatchesPage from './pages/MatchesPage'
 import LeaderboardPage from './pages/LeaderboardPage'
 import MyPredictionsPage from './pages/MyPredictionsPage'
+import PowerRankingsPage from './pages/PowerRankingsPage'
 import './App.css'
 
 const NO_PANEL = ['/login', '/register']
@@ -26,6 +27,7 @@ function Layout() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/matches" element={<MatchesPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/power-rankings" element={<PowerRankingsPage />} />
           <Route path="/my-predictions" element={<MyPredictionsPage />} />
         </Routes>
         {showPanel && <SidePanel />}
