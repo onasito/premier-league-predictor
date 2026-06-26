@@ -6,20 +6,41 @@ function FormBadge({ result }) {
   return <span className={`form-badge form-${result.toLowerCase()}`}>{result}</span>
 }
 
+const MAX_CLIENT_RETRIES = 3
+const RETRY_DELAY_MS = 8000
+
 function PowerRankingsPage() {
-  const [rankings, setRankings] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [rankings, setRankings] = useState(null)
+  const [warming, setWarming] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    api.get('/power-rankings')
-      .then(res => setRankings(res.data))
-      .catch(() => setError('Could not load power rankings. The ML service may be waking up — try again in a moment.'))
-      .finally(() => setLoading(false))
+    let cancelled = false
+
+    function attempt(retriesLeft) {
+      api.get('/power-rankings')
+        .then(res => { if (!cancelled) setRankings(res.data) })
+        .catch(() => {
+          if (cancelled) return
+          if (retriesLeft > 0) {
+            setWarming(true)
+            setTimeout(() => attempt(retriesLeft - 1), RETRY_DELAY_MS)
+          } else {
+            setError('Could not load power rankings. Please try again later.')
+          }
+        })
+    }
+
+    attempt(MAX_CLIENT_RETRIES)
+    return () => { cancelled = true }
   }, [])
 
-  if (loading) return <div className="pr-status">Loading power rankings...</div>
   if (error) return <div className="pr-status error">{error}</div>
+  if (rankings === null) return (
+    <div className="pr-status">
+      {warming ? 'ML service is warming up — please wait...' : 'Loading power rankings...'}
+    </div>
+  )
 
   return (
     <div className="pr-page">
