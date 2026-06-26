@@ -11,7 +11,7 @@ import matchRoutes, { syncFinishedMatches } from './routes/matchRoutes.js';
 import predictionRoutes from './routes/predictionRoutes.js';
 import leaderboardRoutes from './routes/leaderboardRoutes.js';
 import standingsRoutes, { warmStandingsCache } from './routes/standingsRoutes.js';
-import powerRankingsRoutes from './routes/powerRankingsRoutes.js';
+import powerRankingsRoutes, { warmPowerRankingsCache, schedulePowerRankingsRefresh } from './routes/powerRankingsRoutes.js';
 
 
 const PORT = process.env.PORT || 5000;
@@ -68,4 +68,6 @@ app.listen(PORT, () => {
     setInterval(syncFinishedMatches, SYNC_INTERVAL_MS);
     pingMlService();
     setInterval(pingMlService, ML_KEEPALIVE_MS);
+    warmPowerRankingsCache();
+    schedulePowerRankingsRefresh();
 });

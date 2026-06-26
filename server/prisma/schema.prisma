@@ -59,3 +59,9 @@ model Prediction {
   pointsEarned     Int?
   createdAt        DateTime @default(now())
 }
+
+model Cache {
+  key       String   @id
+  data      Json
+  updatedAt DateTime @updatedAt
+}
