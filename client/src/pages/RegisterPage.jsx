@@ -10,6 +10,7 @@ function RegisterPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  // const [rememberMe, setRememberMe] = useState(false)
 
   const { login } = useAuth()
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ function RegisterPage() {
 
     try {
       const res = await api.post('/auth/register', { username, email, password })
-      login(res.data.token, res.data.user)
+      login(res.data.token, res.data.user, false)
       navigate('/')
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.')

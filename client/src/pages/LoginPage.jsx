@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../api'
 import { useAuth } from '../context/AuthContext'
+import MyCheckbox from '../components/Checkbox'
 import './Auth.css'
 
 function LoginPage() {
@@ -9,6 +10,7 @@ function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
 
   const { login } = useAuth()
   const navigate = useNavigate()
@@ -20,7 +22,7 @@ function LoginPage() {
 
     try {
       const res = await api.post('/auth/login', { email, password })
-      login(res.data.token, res.data.user)
+      login(res.data.token, res.data.user, rememberMe)
       navigate('/')
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.')
@@ -61,6 +63,7 @@ function LoginPage() {
           <button type="submit" className="btn-submit" disabled={loading}>
             {loading ? 'Logging in...' : 'Log In'}
           </button>
+          <MyCheckbox checked={rememberMe} onCheckedChange={setRememberMe}/>
         </form>
 
         <p className="auth-switch">

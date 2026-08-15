@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import api from '../api'
 import { useAuth } from '../context/AuthContext'
 import { FaChartBar, FaFutbol, FaTrophy, FaSignOutAlt, FaHome, FaBolt } from 'react-icons/fa'
+import MyCheckbox from './Checkbox'
 import './SidePanel.css'
 
 function SidePanel() {
@@ -13,6 +14,7 @@ function SidePanel() {
   const [password, setPassword] = useState('')
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
 
   async function handleLogin(e) {
     e.preventDefault()
@@ -20,7 +22,7 @@ function SidePanel() {
     setLoading(true)
     try {
       const res = await api.post('/auth/login', { email, password })
-      login(res.data.token, res.data.user)
+      login(res.data.token, res.data.user, rememberMe)
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed.')
     } finally {
@@ -102,6 +104,7 @@ function SidePanel() {
         <button type="submit" className="btn-panel-login" disabled={loading}>
           {loading ? 'Signing in...' : 'Sign In'}
         </button>
+        <MyCheckbox checked={rememberMe} onCheckedChange={setRememberMe}/>
       </form>
 
       <p className="auth-panel-switch">

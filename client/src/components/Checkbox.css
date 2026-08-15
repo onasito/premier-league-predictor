@@ -1,0 +1,30 @@
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/colors/violet.css";
+@import "@radix-ui/colors/white-alpha.css";
+
+.CheckboxRoot {
+    all: unset;
+    background-color: white;
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px var(--black-a7);
+}
+
+.CheckboxRoot:hover {
+    background-color: var(--violet-3);
+}
+
+.CheckboxIndicator {
+    color: var(--violet-11);
+}
+
+.Label {
+    color: var(--white-a12);
+    padding-left: 15px;
+    font-size: 13px;
+    line-height: 1;
+}
