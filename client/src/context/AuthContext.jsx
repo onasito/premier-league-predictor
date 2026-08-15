@@ -7,9 +7,15 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
 
-  function login(newToken, userData) {
-    localStorage.setItem('token', newToken)
-    localStorage.setItem('user', JSON.stringify(userData))
+  function login(newToken, userData, rememberMe) {
+    if (rememberMe === true) {
+      localStorage.setItem('token', newToken)
+      localStorage.setItem('user', JSON.stringify(userData))
+    }
+    else {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+    }
     setToken(newToken)
     setUser(userData)
   }
